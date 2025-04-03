@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapa Interativo - Lojas, Hotéis e Chipotle NYC</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/leaflet.css" />
+    <style>
+        #map { height: 600px; }
+    </style>
+</head>
+<body>
+    <h2>Mapa Interativo - Lojas, Hotéis e Chipotle NYC</h2>
+    <div id="map"></div>
+    <script>
+        var map = L.map('map').setView([40.7624, -73.9738], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Cores personalizadas para os pins
+        function createIcon(color, emoji) {
+            return L.divIcon({
+                className: 'custom-icon',
+                html: `<div style="background-color: ${color}; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: bold;">${emoji}</div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
+                popupAnchor: [0, -30]
+            });
+        }
+
+        var icons = {
+            "loja_oficial": createIcon("blue", "🛍️"),
+            "loja_alternativa": createIcon("green", "🛒"),
+            "hotel": createIcon("red", "🏨"),
+            "chipotle": createIcon("brown", "🌯")
+        };
+
+        var locations = [
+            {name: "Saint Laurent - Greene St", coords: [40.7243, -74.0018], type: 'loja_oficial'},
+            {name: "Polo Ralph Lauren - 3rd Ave", coords: [40.7625, -73.9784], type: 'loja_oficial'},
+            {name: "Polo Ralph Lauren - Prince St", coords: [40.7245, -73.9998], type: 'loja_oficial'},
+            {name: "Ralph Lauren Men's Flagship", coords: [40.7693, -73.9676], type: 'loja_oficial'},
+            {name: "Stone Island", coords: [40.7229, -74.0028], type: 'loja_oficial'},
+            {name: "Saint Laurent - 3rd Ave 59th St", coords: [40.7625, -73.9784], type: 'loja_oficial'},
+            {name: "Valentino", coords: [40.7648, -73.9696], type: 'loja_oficial'},
+            {name: "Saint Laurent - E 57th St", coords: [40.7637, -73.9742], type: 'loja_oficial'},
+            {name: "Ralph Lauren - 3rd Ave", coords: [40.7625, -73.9784], type: 'loja_oficial'},
+            {name: "Metropolis Vintage", coords: [40.7318, -73.9903], type: 'loja_alternativa'},
+            {name: "Stussy Shop", coords: [40.7232, -73.9958], type: 'loja_oficial'},
+            {name: "Thrift NYC", coords: [40.7374, -73.9962], type: 'loja_alternativa'},
+            {name: "Nike House of Innovation NYC", coords: [40.7616, -73.9761], type: 'loja_oficial'},
+            {name: "New Marriott", coords: [40.7097, -74.0134], type: 'hotel'},
+            {name: "Hyatt Place", coords: [40.7441, -73.9941], type: 'hotel'},
+            {name: "Chipotle Union Square South", coords: [40.7336, -73.9896], type: 'chipotle'},
+            {name: "Chipotle Madison Square Park", coords: [40.7430, -73.9872], type: 'chipotle'},
+            {name: "Chipotle NOHO", coords: [40.7269, -73.9961], type: 'chipotle'},
+            {name: "Chipotle Bloomingdales", coords: [40.7625, -73.9679], type: 'chipotle'},
+            {name: "Chipotle Hunter College", coords: [40.7704, -73.9593], type: 'chipotle'}
+        ];
+
+        locations.forEach(function(location) {
+            var icon = icons[location.type] || icons.loja_oficial;
+            L.marker(location.coords, { icon: icon }).addTo(map)
+                .bindPopup(`<b>${location.name}</b>`);
+        });
+    </script>
+</body>
+</html>
